@@ -133,13 +133,19 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="adxl325.h">
+    <Compile Include="adxl345.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="adxl345.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="communicate.cpp">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="communicate.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="itg3200.cpp">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="motors.cpp">

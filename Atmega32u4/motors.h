@@ -10,7 +10,7 @@
 /*
  *		Motor Values from 0 to 500
  *
- *	ESC configured to accept 1350 to 2000
+ *	ESC configured to accept 1450 to 2000 in this case
  *	Running Engines: 1500
  *
  *

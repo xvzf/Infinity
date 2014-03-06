@@ -28,13 +28,12 @@ int main(void)
     {
 		sensors.update_all();	
 		communicate.putstring("Gyro Temp:"); communicate.putfloat(sensors.gyro_temp); communicate.putstring("°C\n");
+		communicate.putstring("ACC X:"); communicate.putfloat(sensors.acc_x); communicate.putchar('\n');
+		communicate.putstring("ACC Y:"); communicate.putfloat(sensors.acc_y); communicate.putchar('\n');
+		communicate.putstring("ACC Z:"); communicate.putfloat(sensors.acc_z); communicate.putchar('\n');
 		communicate.putstring("Gyro X:"); communicate.putfloat(sensors.gyro_x); communicate.putchar('\n');
 		communicate.putstring("Gyro Y:"); communicate.putfloat(sensors.gyro_y); communicate.putchar('\n');
 		communicate.putstring("Gyro Z:"); communicate.putfloat(sensors.gyro_z); communicate.putchar('\n');
-		communicate.putchar('\n');
-		communicate.putchar('\n');
-		communicate.putchar('\n');
-		communicate.putchar('\n');
 		communicate.putchar('\n');
 		communicate.putchar('\n');
 		communicate.putchar('\n');
