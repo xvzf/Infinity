@@ -40,6 +40,7 @@ __motors::__motors() {
 	
 	/* === Configure ESCs === */
 	init_esc();
+	
 }
 	
 __motors::~__motors() {

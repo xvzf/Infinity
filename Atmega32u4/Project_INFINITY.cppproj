@@ -148,6 +148,9 @@
     <Compile Include="itg3200.cpp">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="light_ws2812.cpp">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="motors.cpp">
       <SubType>compile</SubType>
     </Compile>
@@ -167,6 +170,12 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="twi.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="WS2812.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="WS2812.h">
       <SubType>compile</SubType>
     </Compile>
   </ItemGroup>

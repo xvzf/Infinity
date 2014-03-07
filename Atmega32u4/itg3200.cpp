@@ -55,4 +55,15 @@ void __sensors::update_data_itg3600() {
 	
 }
 
+void __sensors::calc_gyro_offset() {
+	gyro_avg_x_tmp =  (gyro_avg_x_tmp + gyro_x);
+	gyro_avg_y_tmp =  (gyro_avg_y_tmp + gyro_y);
+	gyro_avg_z_tmp =  (gyro_avg_z_tmp + gyro_z);
+	
+	if( offset_cntr == CALC_OFFSET) {
+		offset_gyro_x = gyro_avg_x_tmp / float(offset_cntr);
+		offset_gyro_y = gyro_avg_y_tmp / float(offset_cntr);
+		offset_gyro_z = gyro_avg_z_tmp / float(offset_cntr);
+	}
+}
 #endif

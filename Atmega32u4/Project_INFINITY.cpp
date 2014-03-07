@@ -15,12 +15,19 @@
 #include "sensors.h"
 #include "communicate.h"
 
+#include "WS2812.h"
 
 int main(void)
 {
+	WS2812 LED;
+	
+	LED.initializing();
+	
 	__communicate communicate;
 	__motors motors;
 	__sensors sensors;
+	
+	LED.okay();
 	
 	sensors.update_all();
 	

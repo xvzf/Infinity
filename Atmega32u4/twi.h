@@ -48,7 +48,7 @@
 
 /* === Defines === */
 #define F_CPU 16000000UL
-#define TWI_SPEED 100000UL /* HIGH SPEED - For normal speed = 100kHz set 100000UL */
+#define TWI_SPEED 400000UL /* HIGH SPEED - For normal speed = 100kHz set 100000UL */
 #define TWI_ERROR 0
 #define TWI_SUCCESS 1
 #define TWI_READ    1
