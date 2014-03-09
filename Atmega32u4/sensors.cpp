@@ -7,8 +7,12 @@
 
 #include "sensors.h"
 
+#include <avr/interrupt.h>
 
 __sensors::__sensors() {
+}
+
+void __sensors::init() {
 	
 	/* Init Status LED */
 	DDRE |= (1<<STATUS_LED);
@@ -29,17 +33,18 @@ __sensors::__sensors() {
 	gyro_avg_x_tmp = 0; gyro_avg_y_tmp = 0; gyro_avg_z_tmp = 0;
 	acc_avg_x = 0; acc_avg_y = 0; acc_avg_z = 0;
 	
+}
+
+void __sensors::calibrate() {
 	offset_cntr = 0;
-	
 	/* Calculate drift */
 	while(offset_cntr <= CALC_OFFSET) {
 		update_all();
 		calc_gyro_offset();
 		//calc_acc_offset();
-		offset_cntr++;		
+		offset_cntr++;
 		_delay_ms(5);
 	}
-	
 }
 
 __sensors::~__sensors() {
@@ -49,7 +54,6 @@ __sensors::~__sensors() {
 
 /*gather all sensor data*/
 void __sensors::update_all() {
-	
 	/* Toggle Status LED */
 	PORTE |= (1<<STATUS_LED);
 	

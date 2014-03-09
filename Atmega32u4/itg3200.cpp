@@ -11,19 +11,31 @@
 
 /* initialize ITG3600*/
 void __sensors::init_itg3600() {
+	
 	/* Power Management */
+	/*
 	twi_start(ITG3200_ADDR,TWI_WRITE);
-	gyro_error = twi_write(0x3E); twi_write(0x80);
+	twi_write(0x3E); twi_write(0x80);
 	twi_stop();
 	_delay_ms(10);
+	*/
+	
+	twi_start(ITG3200_ADDR, TWI_WRITE);
+	twi_write(0x15); twi_write(0x00);
+	twi_stop();
+	_delay_ms(10);
+	
 	/* Low Pass Filter */
 	twi_start(ITG3200_ADDR,TWI_WRITE);
-	twi_write(0x16); twi_write(0x18 + ITG3200_DLPF);
+	twi_write(0x16); 
+	//twi_write(0x18 + ITG3200_DLPF);
+	twi_write(0x18);
 	twi_stop();
 	_delay_ms(10);
+	
 	/* Power Management */
 	twi_start(ITG3200_ADDR,TWI_WRITE);
-	twi_write(0x3E); twi_write(0x03);
+	twi_write(0x3E); twi_write(0x01); //twi_write(0x03);
 	twi_stop();
 	_delay_ms(10);
 }

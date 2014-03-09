@@ -9,46 +9,57 @@
 
 #include <avr/io.h>
 #include <util/delay.h>
-
+#include <avr/interrupt.h>
 
 #include "motors.h"
-#include "sensors.h"
+#include "IMU.h"
 #include "communicate.h"
 
 #include "WS2812.h"
+
+
+
+void init_timer0_10ms() {
+	TCCR0A |= (1<<WGM01); // Set CTC Mode
+	OCR0A = 156; // 16 Mhz; Prescalor 1024 ==> Counts every 0.00064s ==> 0.01 / 0.0064 = 156.25 ==> OCR0A = 156
+	TIMSK0 |= (1 << OCIE0A); // Set ISR COMPA 
+	sei(); // Enable globale interupts
+	TCCR0B |= (1<<CS02) | (1<<CS00); // set Prescaler 
+}
+
+__IMU sensors;
+
 
 int main(void)
 {
 	WS2812 LED;
 	
-	LED.initializing();
+	LED.blue();
 	
 	__communicate communicate;
 	__motors motors;
-	__sensors sensors;
+	motors.init_esc();
+		
+	LED.initializing();
+	//motors.start_engines();
+	LED.red();
+	sensors.init();
+	sensors.calibrate();
+	LED.green();
 	
-	LED.okay();
-	
-	sensors.update_all();
+	init_timer0_10ms();
 	
     while(1)
-    {
-		sensors.update_all();	
-		communicate.putstring("Gyro Temp:"); communicate.putfloat(sensors.gyro_temp); communicate.putstring("°C\n");
-		communicate.putstring("ACC X:"); communicate.putfloat(sensors.acc_x); communicate.putchar('\n');
-		communicate.putstring("ACC Y:"); communicate.putfloat(sensors.acc_y); communicate.putchar('\n');
-		communicate.putstring("ACC Z:"); communicate.putfloat(sensors.acc_z); communicate.putchar('\n');
-		communicate.putstring("Gyro X:"); communicate.putfloat(sensors.gyro_x); communicate.putchar('\n');
-		communicate.putstring("Gyro Y:"); communicate.putfloat(sensors.gyro_y); communicate.putchar('\n');
-		communicate.putstring("Gyro Z:"); communicate.putfloat(sensors.gyro_z); communicate.putchar('\n');
-		communicate.putchar('\n');
-		communicate.putchar('\n');
-		communicate.putchar('\n');
-		communicate.putchar('\n');
-		communicate.putchar('\n');
-		communicate.putchar('\n');
-		communicate.putchar('\n');
-		_delay_ms(80);
+    {	
+		communicate.putfloat(sensors.pitch);communicate.putchar(',');
+		communicate.putfloat(sensors.roll);communicate.putchar(',');
+		communicate.putfloat(sensors.yaw);communicate.putchar('\n');
+		_delay_ms(25);
     }
 }
 
+
+/* 100Hz update intervall */
+ISR(TIMER0_COMPA_vect) {
+	sensors.update();
+}

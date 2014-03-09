@@ -39,6 +39,10 @@ class __sensors {
 public:
 	__sensors();
 	~__sensors();
+	
+	void init();
+	
+	void calibrate();
 	void update_all();
 	
 	uint8_t gyro_error;

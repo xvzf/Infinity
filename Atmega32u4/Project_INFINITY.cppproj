@@ -145,6 +145,12 @@
     <Compile Include="communicate.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="IMU.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="IMU.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="itg3200.cpp">
       <SubType>compile</SubType>
     </Compile>

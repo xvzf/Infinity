@@ -37,10 +37,6 @@ __motors::__motors() {
     TCCR1A |= (1 << MBACK_L); // connect pin MBACK_L to timer 1 channel C	
 	TCCR3A |= (1 << MFRONT_L); // connect pin MFRONT_L to timer 3 channel A	
 
-	
-	/* === Configure ESCs === */
-	init_esc();
-	
 }
 	
 __motors::~__motors() {
