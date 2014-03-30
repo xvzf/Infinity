@@ -33,9 +33,10 @@ public:
 	__IMU();
 	~__IMU();	
 	void update();
+	void set_zero_point();
+	
 	
 	float pitch, roll, yaw;
-	float angle_x, angle_y, angle_z;
 	float v_x, v_y, v_z;
 	float v, mag_orientation;
 
@@ -43,9 +44,12 @@ private:
 	#ifdef __USE_COMPLEMENTARY__
 	float angle_x_acc, angle_y_acc;
 	float delta_angle_x_gyro, delta_angle_y_gyro, delta_angle_z_gyro;
+	float angle_x_zero, angle_y_zero, angle_z_zero;
+	float angle_x_tmp, angle_y_tmp, angle_z_tmp;
 	void complementary_filter();
 	void atan2_calc_angle_acc();
 	void integ_calc_angle_gyro();
+	float normalize_acc_vector();
 	#endif
 };
 

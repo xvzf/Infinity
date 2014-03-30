@@ -79,17 +79,4 @@ void __sensors::update_data_adxl345() {
 	acc_y = (acc_tmp_y * ADXL345_SCALING) - offset_acc_y;
 	acc_z = (acc_tmp_z * ADXL345_SCALING) - offset_acc_z;
 }
-
-void __sensors::calc_acc_offset() {
-	acc_avg_x =  (acc_avg_x + acc_tmp_x);
-	acc_avg_y =  (acc_avg_y + acc_tmp_y);
-	acc_avg_z =  (acc_avg_z + acc_tmp_z);
-	
-	if(offset_cntr == CALC_OFFSET) {
-		offset_acc_x = acc_avg_x / float(offset_cntr);
-		offset_acc_y = acc_avg_y / float(offset_cntr);
-		offset_acc_z = acc_avg_z / float(offset_cntr); // -1 * ((acc_avg_y / float(offset_cntr)) - 9.81);
-	}
-}
-
 #endif

@@ -29,6 +29,10 @@ void __sensors::init() {
 	init_adxl345();
 	#endif
 	
+	#ifdef __USE_MPU6050__
+	init_mpu6050();
+	#endif
+	
 	/* Variables */
 	gyro_avg_x_tmp = 0; gyro_avg_y_tmp = 0; gyro_avg_z_tmp = 0;
 	acc_avg_x = 0; acc_avg_y = 0; acc_avg_z = 0;
@@ -63,6 +67,10 @@ void __sensors::update_all() {
 	
 	#ifdef __USE_ADXL345__
 	update_data_adxl345();
+	#endif
+	
+	#ifdef __USE_MPU6050__
+	update_data_mpu6050();
 	#endif
 	
 	

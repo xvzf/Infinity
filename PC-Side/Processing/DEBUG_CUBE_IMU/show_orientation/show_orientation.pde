@@ -23,7 +23,7 @@ final int VIEW_SIZE_X = 640, VIEW_SIZE_Y = 480;
 void setup() 
 {
   size(VIEW_SIZE_X, VIEW_SIZE_Y, P3D);
-  myPort = new Serial(this, "COM3", 115200);    
+  myPort = new Serial(this, "COM7", 115200);    
   delay(100);
   myPort.clear();
 }
@@ -35,7 +35,7 @@ void readSensors() {
   if (myPort.available() >= 18) {
     String inputString = myPort.readStringUntil((int) '\n');
     if (inputString != null && inputString.length() > 0) {
-      String [] inputStringArr = split(inputString, ",");
+      String [] inputStringArr = split(inputString, ";");
       angle_x = (PI/180) * float(inputStringArr[0]);
       angle_y = (PI/180) * float(inputStringArr[1]);
       angle_z = (PI/180) * float(inputStringArr[2]);

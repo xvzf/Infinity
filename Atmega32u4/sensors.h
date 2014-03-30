@@ -16,9 +16,13 @@
 #define  CALC_OFFSET 800 
 #define STATUS_LED PE6
 
+
 #define __USE_ITG3200__
 #define __USE_ADXL345__
 
+/*
+#define __USE_MPU6050__
+*/
 
 #define F_CPU 16000000UL
 #include <avr/io.h>
@@ -65,6 +69,14 @@ private:
 	void init_adxl345();
 	void update_data_adxl345();
 	uint8_t adxl345_buffer[6];
+	#endif
+	
+	
+	/* MPU6050 */
+	#ifdef __USE_MPU6050__
+	void init_mpu6050();
+	void update_data_mpu6050();
+	uint8_t buffer[14];
 	#endif
 	
 	/* MISC */
