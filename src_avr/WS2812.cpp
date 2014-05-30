@@ -1,12 +1,14 @@
 /*
-* light weight WS2812 lib V2.1 - Arduino support
-*
-* Controls WS2811/WS2812/WS2812B RGB-LEDs
-* Author: Matthias Riegler
-*
-* Mar 07 2014: Added Arduino and C++ Library
-*
-* License: GNU GPL v2 (see License.txt)
+The MIT License (MIT)
+
+Copyright (c) 2014 Matthias Riegler
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+the Software, and to permit persons to whom the Software is furnished to do so,
+subject to the following conditions:
 */
 
 #include "WS2812.h"
@@ -58,7 +60,7 @@ uint8_t WS2812::set_crgb_at(uint16_t index, cRGB px_value) {
 }
 
 void WS2812::sync() {
-	*ws2812_port_reg |= (1<<pin); // Enable DDR
+	*ws2812_port_reg |= pinMask; // Enable DDR
 	ws2812_sendarray_mask(pixels,3*count_led,pinMask,(uint8_t*) ws2812_port,(uint8_t*) ws2812_port_reg );	
 }
 

@@ -1,8 +1,14 @@
 /*
- * Project_INFINITY.cpp
- *
- * Created: 09.02.2014 12:52:13
- *  Author: Matthias Riegler
+The MIT License (MIT)
+
+Copyright (c) 2014 Matthias Riegler
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+the Software, and to permit persons to whom the Software is furnished to do so,
+subject to the following conditions:
  */ 
 
 #define F_CPU 16000000UL
@@ -52,19 +58,10 @@ void init_quadcopter() {
 	LED.red();
 	sensors.init();
 	sensors.calibrate();
-	init_uart();
+
 	init_timer0_10ms();
 	/* Wait one second */
-	_delay_ms(1000);/*
-	_delay_ms(100);
-	_delay_ms(100);
-	_delay_ms(100);
-	_delay_ms(100);
-	_delay_ms(100);
-	_delay_ms(100);
-	_delay_ms(100);
-	_delay_ms(100);
-	_delay_ms(100);*/
+	_delay_ms(1000);
 	sensors.set_zero_point();
 	LED.green();
 }
