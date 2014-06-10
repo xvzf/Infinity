@@ -24,6 +24,7 @@ export AVRDUDE=avrdude
 export PROCESSING=processing
 export SSH=ssh
 export SSHPASS=sshpass # can left unset then, you have to manually type password
+export EDITOR=gedit 
 
 # SSH
 export SSH_PASSPHRASE=infinity
@@ -46,6 +47,8 @@ export AVRDUDE_PORT='/dev/ttyACM0'
 export AVR_PROJECT_SRC_DIR=${AVR_PROJECT_HOME}/src_avr
 export AVR_PROJECT_INC_DIR=${AVR_PROJECT_HOME}/inc_avr
 export AVR_PROJECT_OUT_DIR=${AVR_PROJECT_HOME}/out_avr
+
+# Internal variables
 
 # Stylistic defines
 red='\e[0;31m'
@@ -172,6 +175,108 @@ function __uninstall() {
 	echo Not implemented yet
 }
 
+function __help() {
+	echo -e "Available commands:"
+	echo -e "\tshow_license: SHOW THE PROJECT LICENSE!!"
+	echo -e "\tbuild: build the complete source tree"
+	echo -e "\tcompile: just compile the complete source tree"
+	echo -e "\tflash: upload to uC, please call 'build' first"
+	echo -e "\tinstall: Installs project, please call 'build' first"
+	echo -e "\tclean: Clean up the build directory"
+	echo -e "\tall: Build and install"
+	echo -e "\tstats: Shows Linex of Code"
+	echo -e "\tssh_copter: Virtual shell on copter"
+	echo -e "\tlaunch_host: Launches Host"
+	echo -e "\tibs-shell: open developer shell"
+	echo -e "\tedit: edit project files"
+	echo -e "\thelp: show this issue"
+}
+
+function devloop() { 
+	
+	if [[ "$var" == "build" ]]; then			
+		build 
+		exit
+	fi
+
+	if [[ "$var" == "compile" ]]; then			
+		init
+		compile
+		exit
+	fi
+
+	if [[ "$var" == "flash" ]]; then			
+		avr_flash
+		exit
+	fi
+
+
+	if [[ "$var" == "install" ]]; then			
+		__install
+		exit
+	fi
+
+	if [[ "$var" == "all" ]]; then			
+		build 
+		__install
+		exit
+	fi
+
+	if [[ "$var" == "clean" ]]; 	then			
+		clean
+		echo -e "$red Cleaned up $NC"
+		exit
+	fi
+
+	if [[ "$var" == "stats" ]]; 	then			
+		clean
+		echo -e "$red Code statistics: $NC"
+		code_stats
+		exit
+	fi
+
+	if [[ "$var" == "launch_host" ]]; 	then			
+		launch
+		exit
+	fi
+
+	if [[ "$var" == "edit" ]]; 	then			
+		$EDITOR ./src*/*.cpp ./inc*/*.h ./ibs.sh  > /dev/null&
+		exit
+	fi
+	
+	if [[ "$var" == "ssh_copter" ]]; 	then			
+		clean
+		$SSHPASS -p $SSH_PASSPHRASE $SSH $SSH_COPTER_USER@$SSH_COPTER_IP
+		exit
+	fi
+	
+	if [[ "$var" == "show_license" ]]; 	then			
+		clean
+		echo -e "$red"	
+		more LICENSE	
+		echo -e "$NC"
+		exit
+	fi
+
+	if [[ "$var" == "help" ]]; 	then			
+		__help
+		exit
+	fi	
+
+	if [[ "$var" == "clear" ]]; 	then			
+		clear
+		exit
+	fi	
+	
+	echo -e "$red"
+	echo "command not recognized, try help"
+	echo -e "$NC"
+}
+
+###
+
+
 ### Info about the program
 echo -e "$blue"
 clear
@@ -182,77 +287,35 @@ echo -e "\t\t####                       ####"
 
 echo -e "$NC"
 
-if [[ "$1" == "build" ]]; then			
-	build 
+if [[ "$1" == "ibs-shell" ]]; then			
+	while true
+	do
+
+		echo -n "<infinity-$USER>#"
+		read input
+
+		if [[ "$input" == "update" ]]; then			
+			git pull
+			exit
+		fi
+
+		if [[ "$input" == "exit" ]]; then			
+			exit
+		fi
+
+		./ibs.sh $input
+	
+		done
 	exit
 fi
 
-if [[ "$1" == "compile" ]]; then			
-	init
-	compile
-	exit
-fi
-
-if [[ "$1" == "flash" ]]; then			
-	avr_flash 
-	exit
-fi
-
-
-if [[ "$1" == "install" ]]; then			
-	__install
-	exit
-fi
-
-if [[ "$1" == "all" ]]; then			
-	build 
-	__install
-	exit
-fi
-
-if [[ "$1" == "clean" ]]; 	then			
-	clean
-	echo -e "$red Cleaned up $NC"
-	exit
-fi
-
-if [[ "$1" == "stats" ]]; 	then			
-	clean
-	echo -e "$red Code statistics: $NC"
-	code_stats
-	exit
-fi
-
-if [[ "$1" == "launch_host" ]]; 	then			
-	launch
-	exit
-fi
-
-if [[ "$1" == "ssh_copter" ]]; 	then			
-	clean
-	$SSHPASS -p $SSH_PASSPHRASE $SSH $SSH_COPTER_USER@$SSH_COPTER_IP
-	exit
-fi
-
-if [[ "$1" == "show_license" ]]; 	then			
-	clean
-	echo -e "$red"	
-	more LICENSE	
+if [[ -z "$1" ]]; then
+	echo -e "$blue" 
+	__help
 	echo -e "$NC"
 	exit
 fi
 
-echo -e "$blue" 
-echo -e "Available commands:"
-echo -e "\tshow_license: SHOW THE PROJECT LICENSE!!"
-echo -e "\tbuild: build the complete source tree"
-echo -e "\tcompile: just compile the complete source tree"
-echo -e "\tflash: upload to uC, please call 'build' first"
-echo -e "\tinstall: Installs project, please call 'build' first"
-echo -e "\tclean: Clean up the build directory"
-echo -e "\tall: Build and install"
-echo -e "\tstats: Shows Linex of Code"
-echo -e "\tssh_copter: Virtual shell on copter"
-echo -e "\tlaunch_host: Launches Host"
-echo -e "$NC"
-exit
+var=$1
+devloop
+
