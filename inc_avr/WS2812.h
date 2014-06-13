@@ -9,28 +9,30 @@ the Software without restriction, including without limitation the rights to
 use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
 the Software, and to permit persons to whom the Software is furnished to do so,
 subject to the following conditions:
-*/
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+ */ 
+
 
 #ifndef WS2812_H_
 #define WS2812_H_
 
+#include "config.h"
+
 #include <avr/interrupt.h>
 #include <avr/io.h>
-#ifndef F_CPU
-#define  F_CPU 16000000UL
-#endif
 #include <util/delay.h>
 #include <stdint.h>
 #include <stdlib.h>
-
-#ifdef ARDUINO
-#if (ARDUINO >= 100)
-#include <Arduino.h>
-#else
-#include <WProgram.h>
-#include <pins_arduino.h>
-#endif
-#endif
 
 struct cRGB { uint8_t g; uint8_t r; uint8_t b; };
 
@@ -46,11 +48,7 @@ public:
 	void set_led_num(uint16_t num_leds);
 	~WS2812();
 	
-	#ifndef ARDUINO
 	void setOutput(const volatile uint8_t* port, volatile uint8_t* reg, uint8_t pin);
-	#else
-	void setOutput(uint8_t pin);
-	#endif
 	
 	cRGB get_crgb_at(uint16_t index);
 	uint8_t set_crgb_at(uint16_t index, cRGB px_value);

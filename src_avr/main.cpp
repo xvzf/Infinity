@@ -9,9 +9,22 @@ the Software without restriction, including without limitation the rights to
 use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
 the Software, and to permit persons to whom the Software is furnished to do so,
 subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
  */ 
 
-#define F_CPU 16000000UL
+#include "config.h"
+
+#include "infinity.h"
 
 #include <avr/io.h>
 #include <util/delay.h>
@@ -19,57 +32,23 @@ subject to the following conditions:
 #include <string.h>
 
 
-#include "motors.h"
-#include "IMU.h"
-#include "WS2812.h"
-
-
-void init_timer0_10ms();
-void init_quadcopter();
-
-
-__IMU sensors;
-__motors motors;
-WS2812 LED;
-
-
+void main_quadrocopter();
 
 int main(void)
 {	
 	
 	init_quadcopter();
+
+	main_quadcopter();
+
+	while(1);	
 	
-    while(1)
-    {		
-    }
+	return 0;
 }
 
 
 /* 100Hz update intervall */
 ISR(TIMER0_COMPA_vect) {
-	sensors.update();
+	all10_quadcopter();
 }
 
-void init_quadcopter() {
-	LED.blue();
-	motors.init_esc();
-	LED.initializing();
-	//motors.start_engines();
-	LED.red();
-	sensors.init();
-	sensors.calibrate();
-
-	init_timer0_10ms();
-	/* Wait one second */
-	_delay_ms(1000);
-	sensors.set_zero_point();
-	LED.green();
-}
-
-void init_timer0_10ms() {
-	TCCR0A |= (1<<WGM01); // Set CTC Mode
-	OCR0A = 156; // 16 Mhz; Prescalor 1024 ==> Counts every 0.00064s ==> 0.01 / 0.0064 = 156.25 ==> OCR0A = 156
-	TIMSK0 |= (1 << OCIE0A); // Set ISR COMPA
-	sei(); // Enable globale interupts
-	TCCR0B |= (1<<CS02) | (1<<CS00); // set Prescaler
-}

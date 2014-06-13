@@ -22,41 +22,45 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
  */ 
 
+#include "infinity.h"
 
 
-#ifndef COMMUNICATE_H_
-#define COMMUNICATE_H_
+__IMU imu;
+__motors motors;
+WS2812 led;
 
-#include "config.h"
+void init_quadcopter() {
+	led.blue();
+	motors.init_esc();
+	led.initializing();
+	//motors.start_engines();
+	led.red();
+	imu.init();
+	imu.calibrate();
 
-#include "infinity_struct.h"
-
-#include <avr/io.h>
-
-#define UBRR_VAL ((F_CPU + UART_BAUD*8) / (UART_BAUD*16)-1)
-
-
-class __communicate {
-public: 
-	__communicate();
-	~__communicate();
-
-	/* Send functions for debugging */
-	void putchar(int8_t toput);
-	void putbyte(uint8_t toput);
-	void putstring(char* string);
-	void putvalue(int32_t toput);
-	void putunsignedvalue(uint32_t toput);
-	void putfloat(float toput);
-
-	void readlastcmd();	
-	uart_cmd* lastcommand;
-
-private:
-
-};
+	init_timer0_10ms();
+	/* Wait one second */
+	_delay_ms(1000);
+	imu.set_zero_point();
+	led.green();
+}
 
 
+void main_quadcopter() {
 
 
-#endif /* COMMUNICATE_H_ */
+}
+
+
+void all10_quadcopter() {
+	imu.update();
+}
+
+
+void init_timer0_10ms() {
+	TCCR0A |= (1<<WGM01); // Set CTC Mode
+	OCR0A = 156; // 16 Mhz; Prescalor 1024 ==> Counts every 0.00064s ==> 0.01 / 0.0064 = 156.25 ==> OCR0A = 156
+	TIMSK0 |= (1 << OCIE0A); // Set ISR COMPA
+	sei(); // Enable globale interupts
+	TCCR0B |= (1<<CS02) | (1<<CS00); // set Prescaler
+}

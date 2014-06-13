@@ -1,5 +1,30 @@
 #!/bin/bash
 
+#/*
+#The MIT License (MIT)
+#
+#Copyright (c) 2014 Matthias Riegler
+#
+#Permission is hereby granted, free of charge, to any person obtaining a copy of
+#this software and associated documentation files (the "Software"), to deal in
+#the Software without restriction, including without limitation the rights to
+#use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+#the Software, and to permit persons to whom the Software is furnished to do so,
+#subject to the following conditions:
+#
+#The above copyright notice and this permission notice shall be included in
+#all copies or substantial portions of the Software.
+#
+#THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+#IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+#FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+#AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+#LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+#OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+#THE SOFTWARE.
+# */ 
+
+
 ####                       ####
 #    INFINITY BUILD SYSTEM    #
 # (c) Matthias Riegler(2014)  #
@@ -8,7 +33,10 @@
 #	Project defines
 
 # Project configuration
-export AVR_PROJECT_SOURCES='IMU.cpp communicate.cpp main.cpp sensors.cpp WS2812.cpp itg3200.cpp motors.cpp sensors_calibration.cpp adxl345.cpp light_ws2812.cpp mpu6050.cpp twi.cpp'
+
+export PROJECT_HOME=.
+
+export AVR_PROJECT_SOURCES='infinity.cpp IMU.cpp communicate.cpp main.cpp sensors.cpp WS2812.cpp itg3200.cpp motors.cpp sensors_calibration.cpp adxl345.cpp light_ws2812.cpp mpu6050.cpp twi.cpp'
 export AVR_PROJECT_HOME=.
 export AVR_PROJECT_LINK_NAME=INFINITY.elf
 export AVR_PROJECT_IHEX_NAME=$AVR_PROJECT_LINK_NAME.hex
@@ -24,7 +52,7 @@ export AVRDUDE=avrdude
 export PROCESSING=processing
 export SSH=ssh
 export SSHPASS=sshpass # can left unset then, you have to manually type password
-export EDITOR=gedit 
+export EDITOR=sublime 
 
 # SSH
 export SSH_PASSPHRASE=infinity
@@ -72,7 +100,7 @@ function avr_init() {
 
 function avr_compile() {
 	for i in $AVR_PROJECT_SOURCES;	do
-		$AVR_CPP -c $AVR_CPPFLAGS -mmcu=$AVR_MCU -I$AVR_PROJECT_INC_DIR $AVR_PROJECT_SRC_DIR/$i -o ${AVR_PROJECT_OUT_DIR}/${i}.o
+		$AVR_CPP -c $AVR_CPPFLAGS -mmcu=$AVR_MCU -I$PROJECT_HOME -I$AVR_PROJECT_INC_DIR $AVR_PROJECT_SRC_DIR/$i -o ${AVR_PROJECT_OUT_DIR}/${i}.o
 		if [[ $? -eq 0 ]];	then			
 			echo -e "AVR: $i: $green Compiled successfully $NC"
 		else
@@ -126,7 +154,7 @@ function avr_flash() {
 
 function avr_info() {
 	echo -e "  == AVR USAGE INFO =="
-	$AVR_SIZE --mcu=$AVR_MCU $AVR_PROJECT_OUT_DIR/linked/$AVR_PROJECT_LINK_NAME
+	$AVR_SIZE $AVR_PROJECT_OUT_DIR/linked/$AVR_PROJECT_LINK_NAME
 	echo -e "  ==                =="
 }
 
@@ -241,7 +269,7 @@ function devloop() {
 	fi
 
 	if [[ "$var" == "edit" ]]; 	then			
-		$EDITOR ./src*/*.cpp ./inc*/*.h ./ibs.sh  > /dev/null&
+		$EDITOR ./src*/*.cpp ./inc*/*.h ./ibs.sh ./config.h > /dev/null&
 		exit
 	fi
 	

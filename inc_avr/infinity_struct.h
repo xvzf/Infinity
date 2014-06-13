@@ -22,41 +22,22 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
  */ 
 
-
-
-#ifndef COMMUNICATE_H_
-#define COMMUNICATE_H_
+#ifndef INFINITY_STRUCT_H__
+#define INFINITY_STRUCT_H__
 
 #include "config.h"
 
-#include "infinity_struct.h"
+#include <stdint.h>
 
-#include <avr/io.h>
-
-#define UBRR_VAL ((F_CPU + UART_BAUD*8) / (UART_BAUD*16)-1)
-
-
-class __communicate {
-public: 
-	__communicate();
-	~__communicate();
-
-	/* Send functions for debugging */
-	void putchar(int8_t toput);
-	void putbyte(uint8_t toput);
-	void putstring(char* string);
-	void putvalue(int32_t toput);
-	void putunsignedvalue(uint32_t toput);
-	void putfloat(float toput);
-
-	void readlastcmd();	
-	uart_cmd* lastcommand;
-
-private:
-
+struct uart_cmd {
+	char index;
+	uint8_t index0;
+	uint8_t index1;
+	uint8_t index2;
+	uint8_t index3;
+	uint8_t index4;
+	uint8_t index5;
 };
 
 
-
-
-#endif /* COMMUNICATE_H_ */
+#endif /* INFINITY_STRUCT_H__ */

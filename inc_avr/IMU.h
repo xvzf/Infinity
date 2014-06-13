@@ -9,27 +9,29 @@ the Software without restriction, including without limitation the rights to
 use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
 the Software, and to permit persons to whom the Software is furnished to do so,
 subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
  */ 
 
 
 #ifndef IMU_H_
 #define IMU_H_
 
+
+#include "config.h"
+
 #include "sensors.h"
 #include <math.h>
 
-
-/* 100 Hz Update intervall, needed to calculate gyro angle */
-#define UPDATE_INTERVALL 0.01 
-
-/* === Complementary Filter === */
-#define  __USE_COMPLEMENTARY__ // Uncomment to enable Complementary Filter
-#ifdef __USE_COMPLEMENTARY__
-/* Complementary Filter Settings */
-#define COMPLEMENTARY_ACC_INFLUENCE 0.02 // 2 Percent - Have to be tuned!
-#define REVERSE_ACC_X 1 // 1 for no reverse
-#define REVERSE_ACC_Y -1 // 1 for no reverse
-#endif
 
 class __IMU: public __sensors {
 public:
