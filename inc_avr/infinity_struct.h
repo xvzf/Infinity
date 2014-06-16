@@ -20,7 +20,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
- */ 
+ */
 
 #ifndef INFINITY_STRUCT_H__
 #define INFINITY_STRUCT_H__
@@ -29,14 +29,21 @@ THE SOFTWARE.
 
 #include <stdint.h>
 
-struct uart_cmd {
-	char index;
-	uint8_t index0;
-	uint8_t index1;
-	uint8_t index2;
-	uint8_t index3;
-	uint8_t index4;
-	uint8_t index5;
+struct simple_string
+{
+	char* string;
+	uint16_t length;
+};
+
+struct uart_cmd
+{
+    char index;
+    uint16_t index0;
+    uint16_t index1;
+    uint16_t index2;
+    uint16_t index3;
+    uint16_t index4;
+    uint16_t index5;
 };
 
 

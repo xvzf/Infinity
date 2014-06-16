@@ -19,38 +19,47 @@ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
- */
-
-#ifndef MOTORS_H_
-#define MOTORS_H_
-
-#include "config.h"
-
-#include <avr/io.h>
-#include <util/delay.h>
-
-class __motors
-{
-public:
-    __motors();
-    ~__motors();
-
-    void init_esc();
-    void soft_start_engines();
-    void soft_stop_engines();
-    void emergency_stop_engines();
-    void update();
-
-    uint16_t FRONT_L;
-    uint16_t FRONT_R;
-    uint16_t BACK_L;
-    uint16_t BACK_R;
-
-private:
-
-};
+THE SOFTWARE. */
 
 
+#include "pid.h"
 
-#endif /* MOTORS_H_ */
+simplePID::simplePID(float P,float I ,float D) {
+	float e_last = 0;
+	float e_sum = 0;
+
+}
+
+simplePID::~simplePID() {
+
+}  
+
+void simplePID::set_value(float val) {
+	this->value_actually = val;
+}
+
+void simplePID::set_tobe(float val) {
+	this->value_tobe = val;
+}
+
+float simplePID::update() {
+
+	/* Calculate difference */
+	dif = value_actually - value_tobe;
+
+	dif_sum += dif;
+
+	/* proportional regulator */
+	float yP = Kp * dif;
+
+	/* integral regulator */
+	float yI = Ki * UPDATE_INTERVALL * dif_sum;
+	
+	/* differential regulator */
+	float yD = Kd * ((dif-dif_last)/UPDATE_INTERVALL);
+
+	/* Update variable values */
+	dif_last =dif;
+
+	return (yP + yI + yD);
+}

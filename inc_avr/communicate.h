@@ -20,7 +20,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
- */ 
+ */
 
 
 
@@ -31,32 +31,35 @@ THE SOFTWARE.
 
 #include "infinity_struct.h"
 
-#include <avr/io.h>
+#include "uart_teensy.h"
 
-#define UBRR_VAL ((F_CPU + UART_BAUD*8) / (UART_BAUD*16)-1)
-
-
-class __communicate {
-public: 
-	__communicate();
-	~__communicate();
-
-	/* Send functions for debugging */
-	void putchar(int8_t toput);
-	void putbyte(uint8_t toput);
-	void putstring(char* string);
-	void putvalue(int32_t toput);
-	void putunsignedvalue(uint32_t toput);
-	void putfloat(float toput);
-
-	void readlastcmd();	
-	uart_cmd* lastcommand;
-
-private:
-
-};
-
-
-
+#include <stdint.h>
 
 #endif /* COMMUNICATE_H_ */
+
+/* Should be self explaining */
+class __uart
+{
+public:
+    __uart();
+    ~__uart();
+
+    void init();
+
+    void print(char c);
+    void print(char *string);
+    void print(float toput);
+    void print(int16_t toput);
+    void print(int32_t toput);
+    uint8_t available();
+    char get();
+
+    /* data */
+};
+
+/*
+void uart_init();
+void uart_putchar(uint8_t c);
+uint8_t uart_getchar(void);
+uint8_t uart_available(void);
+*/

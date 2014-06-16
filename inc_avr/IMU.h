@@ -20,7 +20,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
- */ 
+ */
 
 
 #ifndef IMU_H_
@@ -33,29 +33,38 @@ THE SOFTWARE.
 #include <math.h>
 
 
-class __IMU: public __sensors {
+class __IMU
+{
 public:
-	__IMU();
-	~__IMU();	
-	void update();
-	void set_zero_point();
-	
-	
-	float pitch, roll, yaw;
-	float v_x, v_y, v_z;
-	float v, mag_orientation;
+    __IMU();
+    ~__IMU();
+
+    void init();
+
+    void calibrate();
+
+    void update();
+    void set_zero_point();
+
+
+    float pitch, roll, yaw;
+    float v_x, v_y, v_z;
+    float v, mag_orientation;
 
 private:
-	#ifdef __USE_COMPLEMENTARY__
-	float angle_x_acc, angle_y_acc;
-	float delta_angle_x_gyro, delta_angle_y_gyro, delta_angle_z_gyro;
-	float angle_x_zero, angle_y_zero, angle_z_zero;
-	float angle_x_tmp, angle_y_tmp, angle_z_tmp;
-	void complementary_filter();
-	void atan2_calc_angle_acc();
-	void integ_calc_angle_gyro();
-	float normalize_acc_vector();
-	#endif
+
+    __sensors sensors;
+
+#ifdef __USE_COMPLEMENTARY__
+    float angle_x_acc, angle_y_acc;
+    float delta_angle_x_gyro, delta_angle_y_gyro, delta_angle_z_gyro;
+    float angle_x_zero, angle_y_zero, angle_z_zero;
+    float angle_x_tmp, angle_y_tmp, angle_z_tmp;
+    void complementary_filter();
+    void atan2_calc_angle_acc();
+    void integ_calc_angle_gyro();
+    float normalize_acc_vector();
+#endif
 };
 
 

@@ -36,7 +36,7 @@
 
 export PROJECT_HOME=.
 
-export AVR_PROJECT_SOURCES='infinity.cpp IMU.cpp communicate.cpp main.cpp sensors.cpp WS2812.cpp itg3200.cpp motors.cpp sensors_calibration.cpp adxl345.cpp light_ws2812.cpp mpu6050.cpp twi.cpp'
+export AVR_PROJECT_SOURCES='uart_teensy.c infinity.cpp IMU.cpp communicate.cpp main.cpp sensors.cpp WS2812.cpp itg3200.cpp motors.cpp pid.cpp sensors_calibration.cpp adxl345.cpp light_ws2812.cpp mpu6050.cpp twi.cpp'
 export AVR_PROJECT_HOME=.
 export AVR_PROJECT_LINK_NAME=INFINITY.elf
 export AVR_PROJECT_IHEX_NAME=$AVR_PROJECT_LINK_NAME.hex
@@ -61,8 +61,8 @@ export SSH_COPTER_IP=12.0.1.4
 
 # AVR GCC
 export AVR_MCU='atmega32u4'
-export AVR_CPPFLAGS='-std=gnu++11 -O3'
-export AVR_LDFLAGS='-fno-use-cxa-atexit'
+export AVR_CPPFLAGS='-std=gnu++11 -O3 -Werror'
+export AVR_LDFLAGS='-fno-use-cxa-atexit -lm'
 
 # AVR Dude
 export AVRDUDE_MMCU='m32u4'
@@ -143,7 +143,7 @@ function avr_build() {
 }
 
 function avr_flash() {
-	$AVRDUDE -p $AVRDUDE_MMCU -P $AVRDUDE_PORT -c $AVRDUDE_PROGRAMMER -u -U flash:w:$PROJECT_OUT_DIR/ihex/$PROJECT_IHEX_NAME
+	$AVRDUDE -p $AVRDUDE_MMCU -P $AVRDUDE_PORT -c $AVRDUDE_PROGRAMMER -u -U flash:w:$AVR_PROJECT_OUT_DIR/ihex/$AVR_PROJECT_IHEX_NAME
 	if [[ $? -eq 0 ]];	then			
 		echo -e "AVR: $AVRDUDE: $green Uploaded successfully $NC"
 	else
@@ -269,7 +269,7 @@ function devloop() {
 	fi
 
 	if [[ "$var" == "edit" ]]; 	then			
-		$EDITOR ./src*/*.cpp ./inc*/*.h ./ibs.sh ./config.h > /dev/null&
+		$EDITOR ./src*/*.cpp ./src*/*.c ./inc*/*.h ./ibs.sh ./config.h > /dev/null&
 		exit
 	fi
 	

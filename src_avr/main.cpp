@@ -20,7 +20,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
- */ 
+ */
 
 #include "config.h"
 
@@ -35,20 +35,20 @@ THE SOFTWARE.
 void main_quadrocopter();
 
 int main(void)
-{	
-	
-	init_quadcopter();
+{
 
-	main_quadcopter();
+    init_quadcopter();
 
-	while(1);	
-	
-	return 0;
+    main_quadcopter();
+
+    while (1);
+
+    return 0;
 }
 
 
 /* 100Hz update intervall */
-ISR(TIMER0_COMPA_vect) {
-	all10_quadcopter();
+ISR(TIMER0_COMPA_vect)
+{
+    all10_quadcopter();
 }
-

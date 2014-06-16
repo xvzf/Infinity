@@ -20,7 +20,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
- */ 
+ */
 
 #ifndef CONFIG_H_
 #define CONFIG_H_
@@ -30,15 +30,15 @@ THE SOFTWARE.
 #define F_CPU 16000000UL
 
 /* ======== Sensors ======== */
-#define  CALC_OFFSET 800 
+#define  CALC_OFFSET 800
 #define STATUS_LED PE6
 #define __USE_ITG3200__
 #define __USE_ADXL345__
 //#define __USE_MPU6050__
 
 /* ======= IMU ======= */
-#define UPDATE_INTERVALL 0.01 
-#define  __USE_COMPLEMENTARY__ 
+#define UPDATE_INTERVALL 0.01
+#define  __USE_COMPLEMENTARY__
 #define COMPLEMENTARY_MAX_ACC_NORMALIZED 12.00f // 12 m/s^2
 
 
@@ -49,10 +49,10 @@ THE SOFTWARE.
 
 /* ======== Motors ======== */
 /*
- *		Motor Values from 0 to 500
+ *      Motor Values from 0 to 500
  *
- *	ESC configured to accept 1450 to 2000 in this case
- *	Running Engines: 1500
+ *  ESC configured to accept 1450 to 2000 in this case
+ *  Running Engines: 1500
  *
  *
  */

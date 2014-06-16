@@ -22,35 +22,32 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
  */
 
-#ifndef MOTORS_H_
-#define MOTORS_H_
-
+#include <math.h>
 #include "config.h"
 
-#include <avr/io.h>
-#include <util/delay.h>
-
-class __motors
+class simplePID
 {
 public:
-    __motors();
-    ~__motors();
-
-    void init_esc();
-    void soft_start_engines();
-    void soft_stop_engines();
-    void emergency_stop_engines();
-    void update();
-
-    uint16_t FRONT_L;
-    uint16_t FRONT_R;
-    uint16_t BACK_L;
-    uint16_t BACK_R;
+	/* Self explaining */
+	simplePID(float P,float I ,float D);	
+	~simplePID();	
+	float update();	
+	void set_value(float val);
+	void set_tobe(float val);
 
 private:
 
+	float value_tobe;
+	float value_actually;
+
+	/* PID variables */
+	float Kp;
+	float Ki;
+	float Kd;
+
+	/* difference values */
+	float dif;
+	float dif_last;
+	float dif_sum;
+
 };
-
-
-
-#endif /* MOTORS_H_ */

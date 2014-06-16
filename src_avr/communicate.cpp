@@ -20,130 +20,78 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
- */ 
+ */
+
+/* Orientated by the Teensy UART Library - see https://www.pjrc.com/teensy/uart.html */
 
 #include "communicate.h"
 
 #include <stdlib.h>
 
-#include <avr/interrupt.h>
+__uart::__uart()
+{
 
+}
 
-/*  Set to 1 if String is received completely */
-volatile uint8_t uart_str_rec_complete = 0;
-/* Counts the total number of received characters */
-volatile uint8_t uart_str_rec_count = 0;
-/* FIFO Buffer to store the received chars */
-volatile char buffer[COMMUNICATE_UART_REC_BUFFER + 1] = "";
+__uart::~__uart()
+{
 
-uart_cmd received_command;
-uint8_t readyfornewcommand = 1; /* 1 if ready */
+}
 
+void __uart::init() {
+	uart_init();
+}
 
-__communicate::__communicate() {
-	
-	/* Baud Rate */
-	/*
-	UBRR1H = UBRR_VAL >> 8;
-	UBRR1L = UBRR_VAL & 0xFF;
-	*/
+void __uart::print(char c)
+{
+    uart_putchar(c);
+}
 
-	lastcommand = &received_command;
+void __uart::print(char *string)
+{
+    while (*string)
+    {
+        print(*string);
+        string++;
+    }
+}
 
-	/* 16-bit register available */
-	UBRR1 = UBRR_VAL; 
-	
-	/* TX & RX Enable */
-	UCSR1B |= (1<<TXEN1);
-	UCSR1B |= (1<<RXEN1);
+void __uart::print(float toput)
+{
+    char buffer[10];
 
+    dtostrf( toput, 6, 3, buffer);
 
-	/* Enable Rx interrupt */
-	UCSR1B |= (1<<RXCIE1);
-	
-	/* Asynchrone 8N1 */
-	UCSR1C |= (1<<USBS1) | (1<<UCSZ11) | (1<<UCSZ10);
-	
-	/* Enable global interrupts */
-	sei();
+    this->print((char *)buffer);
+}
 
-	/* !!! TODO !!!*/ /* Wait for raspberry pi to boot up, just for testing now
-	if the microcontroller is connected to the PC!! */
-	/*Displays the raspberry pi program is ready to receive commands */
-	putstring((char*)"Ready\n");
+void __uart::print(int16_t toput)
+{
+
+    char buffer[7];
+
+    itoa( toput, buffer, 10 );
+
+    this->print((char *)buffer);
 }
 
 
-__communicate::~__communicate() {
-	
-		
+void __uart::print(int32_t toput)
+{
+
+    char buffer[12];
+
+    ltoa( toput, buffer, 10 );
+
+    this->print((char *)buffer);
 }
 
-void __communicate::putbyte(uint8_t toput) {
-	while(!(UCSR1A & (1<<UDRE1)));
-	UDR1 = toput;
+uint8_t __uart::available()
+{
+    return uart_available();
 }
 
-void __communicate::putchar(int8_t toput) {
-	while(!(UCSR1A & (1<<UDRE1)));
-	UDR1 = toput;
-}
-
-void __communicate::putstring(char* string) {
-	while(*string) {
-		putchar(*string);
-		string++;
-	}
-}
-
-void __communicate::putunsignedvalue(uint32_t toput) {
-	char string[12];
-	putstring(ultoa(toput,string,10));
-}
-
-void __communicate::putvalue(int32_t toput) {
-	char string[12];
-	putstring(ltoa(toput,string,10));
-}
-
-void __communicate::putfloat(float toput) {
-	char string[12];
-	putstring(dtostrf(toput,7,3,string));
-}
-
-void __communicate::readlastcmd() {
-	readyfornewcommand = 1;
-	putstring((char*)"Ready\n");
-}
-
-
-/* Reads the received command and writes the data into received_command */
-void uart_cmd_evaluate() {
-	/* !!! ToDo !!! */
-	readyfornewcommand = 0; /* Will wait until the last received command is executed */
-}
-
-/* ISR wich receives all incoming data and writes it to a string */
-
-ISR(USART1_RX_vect) {
-	uint8_t nxtchr;
-
-	/* Read Puffer */
-	nxtchr = UDR1;
-
-	if( uart_str_rec_complete == 0 && (readyfornewcommand == 1)) {
-
-		/* Check for bufferoverflow and line endings in windows and POSIX world */
-		if ( (nxtchr != '\n') && (nxtchr |= '\r') && (uart_str_rec_count < COMMUNICATE_UART_REC_BUFFER))
-		{
-			buffer[uart_str_rec_count] = nxtchr;
-			uart_str_rec_count++;
-		} else {
-			buffer[COMMUNICATE_UART_REC_BUFFER] = '\0';
-			uart_str_rec_count = 0;
-			uart_str_rec_complete = 1;
-		}
-	} else if (readyfornewcommand) {
-		uart_cmd_evaluate();
-	}
+char __uart::get()
+{
+    return uart_getchar();
 }
